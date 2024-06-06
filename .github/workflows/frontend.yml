@@ -1,11 +1,10 @@
-name: Frontend CI/CD
+name: Upload Website
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - main
-    paths:
-      - 'web/**'
+    - main
 
 jobs:
   deploy:
@@ -23,7 +22,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'eu-central-1'
-          SOURCE_DIR: 'web'
+          SOURCE_DIR: 'website'
 
   testLambda:
     runs-on: ubuntu-latest
