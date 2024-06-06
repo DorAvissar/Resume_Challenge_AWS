@@ -26,10 +26,11 @@ jobs:
 
       - name: Create CloudFront Invalidation
         run: |
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+            aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_SECRET_DISTRIBUTION_ID }} --paths "/*"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'eu-central-1'
 
   testLambda:
     runs-on: ubuntu-latest
