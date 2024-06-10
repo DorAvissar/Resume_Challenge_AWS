@@ -1,5 +1,6 @@
 # AWS Cloud Resume Challenge
 Welcome to my Cloud Resume Challenge project! ☁️
+![architecture drawio](https://github.com/DorAvissar/Resume_Challenge_AWS/assets/165499842/d9348655-4297-450f-999b-27cfd7f9ae31)
 
 Over the course of two intensive weekends, I devoted significant effort to this project. Whether you're an experienced professional or new to AWS, I hope my project inspires and assists you on your own cloud computing journey. Let's dive in together!
 
