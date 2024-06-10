@@ -36,24 +36,25 @@ I used this <a href="https://awsspeedtest.com/latency"> site</a>  to verify the 
 
 5. Redundancy and High Availability: If high availability is critical for your application, consider deploying resources across multiple regions for redundancy and disaster recovery purposes.
 
+<img src="https://github.com/DorAvissar/Resume_Challenge_AWS/blob/main/website/assets/latancycheck.png?raw=true">
 
 ## Front-end
 
 ## Phase-1: Building the Resume-Website
 <p>So the first phase was to build a resume static website using html and css. Since I didnt want to spend too much time on desinging the resume website I used a template from the internet and altered the code depending on how I wanted it to look. Then I added all the details necessary for the resume page.</p>
-<img src="https://github.com/DorAvissar/ResumeChallenge-/blob/main/frontend/frontscreen.jpg?raw=true">
+<img src="https://github.com/DorAvissar/Resume_Challenge_AWS/blob/main/website/assets/mainapp.png?raw=true">
 This is the result of the staic resume page.
 
 ## Phase-2: Setup CloudFront distribution and S3 Bucket
 This phase focuses on deploying the static site to the cloud. In AWS, this can be achieved by hosting the static site on an S3 bucket. 
 AWS S3 has an option to configure it for static website hosting. Once configured, you can upload your website files directly via the AWS Management Console or the CLI. 
 The image below shows the uploaded files for the static site in the S3 bucket.
-
 You can access the static website through the endpoint provided by AWS for this specific site. 
 Additionally, the S3 bucket is configured to allow traffic only from the CDN, which we will discuss later. This ensures that all requests to the static site go through the CDN, enhancing security and performance.
+<img src="https://github.com/DorAvissar/Resume_Challenge_AWS/blob/main/website/assets/s3.png?raw=true">
 
 ## Phase-3: Domain and CDN
-First I bought a domain (on godaddy -  <a href="https://resumedorav.online/"> resumedorav.online</a>) for this project. 
+First I bought a domain (on godaddy -<a href="https://resumedorav.online/"> resumedorav.online</a>) for this project. 
 
 I could have used Amazon Route 53 for DNS management, but purchase a domain from GoDaddy is cheaper.
 So instead, I pointed the domain I purchased to the Amazon CloudFront endpoint. 
