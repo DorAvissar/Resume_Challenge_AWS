@@ -28,10 +28,11 @@ Over the course of two intensive weekends, I devoted significant effort to this 
 <img src="https://github.com/DorAvissar/ResumeChallenge-/blob/main/frontend/frontscreen.jpg?raw=true">
 This is the result of the staic resume page.
 
-## Phase-2 (Hosting the website in azure)
-<p>This phase is all about deploying the static site to the cloud. In Azure we can achieve this by deploying the static site to a blob storage. Azure Blob storage has an option to configure it to host static websites. Once configured you can find a container named as $web. Now you can upload the website files directly from the portal or the cli. I personally chose to do it through the cli. The image below shows you the uploaded files for the static site in the blob storage</p>
-<img src="https://github.com/DorAvissar/ResumeChallenge-/blob/main/frontend/WEB.jpg?raw=true">
-And you can access the static website through the primary endpoint given by azure for this particular site. [You can find it in the capabilites section in the overview of the Blob account and click "Static website" and find the primary and secondary endpoints], later i connected the Domain I purchased to the Static website to generate a short and accessible url.
+## Phase-2 (Hosting the website in AWS)
+<p>This phase focuses on deploying the static site to the cloud using AWS. In AWS, we can achieve this by deploying the static site to an S3 bucket. AWS S3 has an option to configure it to host static websites. Once configured, you can upload the website files directly through the AWS Management Console.
+The image below shows you the uploaded files for the static site in the S3 bucket.
+You can access the static website through the endpoint provided by AWS for this particular site. 
+Later, I connected the domain I purchased to the cdn (that we will discussed later) to create a short and accessible URL.<p>
 
 ## Phase-3 (Domain and CDN)
 I bought a domain (on godaddy -  <a href="https://azureresumesta.z20.web.core.windows.net/"> resumedorav.online</a>) for this project. 
