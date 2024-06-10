@@ -22,36 +22,69 @@ Over the course of two intensive weekends, I devoted significant effort to this 
 - Visual Studio Code
 - A cheap domain provider (im using GoDaddy)
 
+## Choose region: 
+Before starting to work on the project in aws console, i needed to choose which region is the best for me (for best practice).
+so how to choose your best region? 
+1. Proximity to Users: Select a region closest to your target audience to minimize latency and improve user experience. 
+I used this <a href="https://awsspeedtest.com/latency"> site</a>  to verify the latency.
+
+2. Compliance Requirements: Ensure the chosen region complies with any legal or regulatory requirements for data sovereignty, residency, or privacy laws applicable to your application or business. (for me its not a problem)
+
+3. Service Availability: Check the availability of AWS services you plan to use in the region. 
+
+4. Cost Considerations: AWS pricing can vary by region, so evaluate the cost of resources and data transfer in different regions to optimize your budget.
+
+5. Redundancy and High Availability: If high availability is critical for your application, consider deploying resources across multiple regions for redundancy and disaster recovery purposes.
+
+
 ## Front-end
-## Phase-1 (Building the Resume-Website)
+
+## Phase-1: Building the Resume-Website
 <p>So the first phase was to build a resume static website using html and css. Since I didnt want to spend too much time on desinging the resume website I used a template from the internet and altered the code depending on how I wanted it to look. Then I added all the details necessary for the resume page.</p>
 <img src="https://github.com/DorAvissar/ResumeChallenge-/blob/main/frontend/frontscreen.jpg?raw=true">
 This is the result of the staic resume page.
 
-## Phase-2 (Hosting the website in AWS)
-<p>This phase focuses on deploying the static site to the cloud using AWS. In AWS, we can achieve this by deploying the static site to an S3 bucket. AWS S3 has an option to configure it to host static websites. Once configured, you can upload the website files directly through the AWS Management Console.
-The image below shows you the uploaded files for the static site in the S3 bucket.
-You can access the static website through the endpoint provided by AWS for this particular site. 
-Later, I connected the domain I purchased to the cdn (that we will discussed later) to create a short and accessible URL.<p>
+## Phase-2: Setup CloudFront distribution and S3 Bucket
+This phase focuses on deploying the static site to the cloud. In AWS, this can be achieved by hosting the static site on an S3 bucket. 
+AWS S3 has an option to configure it for static website hosting. Once configured, you can upload your website files directly via the AWS Management Console or the CLI. 
+The image below shows the uploaded files for the static site in the S3 bucket.
 
-## Phase-3 (Domain and CDN)
-I bought a domain (on godaddy -  <a href="https://azureresumesta.z20.web.core.windows.net/"> resumedorav.online</a>) for this project. 
-I could have used Azure DNS but my subscription credits wasnt able to actually get a domain name. Then I pointed this domain to the Azure CDN endpoint. CDN refers to content delivery network. It is a network of multiple proxy servers with a primary goal of delivering content with high availability. So users across different geographical locations can access it faster.
+You can access the static website through the endpoint provided by AWS for this specific site. 
+Additionally, the S3 bucket is configured to allow traffic only from the CDN, which we will discuss later. This ensures that all requests to the static site go through the CDN, enhancing security and performance.
+
+## Phase-3: Domain and CDN
+First I bought a domain (on godaddy -  <a href="https://resumedorav.online/"> resumedorav.online</a>) for this project. 
+
+I could have used Amazon Route 53 for DNS management, but purchase a domain from GoDaddy is cheaper.
+So instead, I pointed the domain I purchased to the Amazon CloudFront endpoint. 
+CloudFront is a Content Delivery Network (CDN), which is a network of multiple proxy servers with the primary goal of delivering content with high availability and performance. This ensures that users across different geographical locations can access the site faster.
+
+To help you with this , here is a step-by-step guide to migrating your GoDaddy domain to AWS using S3, CloudFormation, ACM & CloudFront <a href="https://sodkiewiczm.medium.com/how-to-use-go-daddy-domain-in-aws-f295645ed548"> guide</a>.
   
 
 ## Back-end
-## Phase-4 (Javascript-webapp)
-Now we have a static website to display our resume. The next challenge was to create a counter to keep track of how many times the page has been visited and this can be achieved using js. 
-I used an event listener to trigger and call the `main.js` function whenever the dom elements or content gets reloaded. This function sends a http request to the azure function( we will talk about it in the next phase) to get the count and display it in the website. You can take a look at the code to understand how it has been done. Its simply is a basic get request.
+## Phase-4: Javascript-webapp
+The next challenge was to create a counter to keep track of how many times the page has been viewed, and this can be achieved using JavaScript. I used an event listener to trigger and call the main.js function whenever the DOM elements or content get reloaded. This function sends an HTTP request to an AWS Lambda function (we will discuss this in the next phase) to get the count and display it on the website. You can take a look at the code to understand how it has been done. It is simply a basic GET request.
 
-## Phase-5 (Azure functions)
-Now comes the important part. I have to create a function to update the count of the visitors everytime the page is reloaded. This can be acheived by using HTTP trigger for the function. Which means the function will run everytime the page gets reloaded. So I created a function to fetch the count from the Azure cosmos DB( next phase) and then update the count by increasing it by one and then returning it to the front end so that it can display the count. 
+## Phase-5: Lambda function
+Now comes the important part. I have to create a function to update the count of visitors every time the page is reloaded. This can be achieved by using an HTTP trigger for the AWS Lambda function, meaning the function will run every time the page is reloaded. So, I created a function to fetch the count from the Amazon DynamoDB (next phase) and then update the count by increasing it by one, returning it to the front end to display the count.
+You can check out the code in the  lambda folder on my Github
 
-## Phase-6 (Azure Cosmos DB)
-Now I have to create a cosmos Db to store the number of visitors. The database itself is also serverless so I only had to pay for the usage. After creating the database , I created a table to enter the visiter count value. I used Table API to retrieve and update the count value. Since this was my frist time working with Table in Cosmos DB , It took me some time to understand how the data works and how the whole table is structured. This <a href="https://learn.microsoft.com/en-us/azure/cosmos-db/table/quickstart-python?tabs=azure-portal"> document</a> helped me understand how it works.
+## Phase-6: Amazon DynamoDB
+To store the number of visitors in AWS, I created an Amazon DynamoDB table. DynamoDB is also serverless, so I only had to pay for the resources I used. After creating the table, I set up the necessary attributes and primary key to store and retrieve the visitor count value. DynamoDB's flexible schema allowed me to adapt quickly, although it took some time to familiarize myself with its structure since it was my first time working with it. I used the AWS SDK to interact with the DynamoDB table, fetching and updating the count value as needed. 
 
 ## Phase-7 (Terraform)
-After creating the application with the necessary services , its time to automate the whole application. To automate the process of provisioning the resources in azure we can use terraform which is an IaC tool. Since in the previous phase I have already provisioned the resources using the cli and the portal I had to find a way to manage those resources.So I created an <a href="https://developer.hashicorp.com/terraform/language/import">import.tf file to create a state file for the existing resources</a> in the cloud provider. This was done by using the <a href="https://developer.hashicorp.com/terraform/language/import">import block</a>. After getting the state files I performed operations as how we would do normally while creating the resoruces from the start. After this I made the necessary changes needed to automate the provisioning such as storing the application setting variables. Coming to variables I stores few of them in the tfvars.tf file while for the variables that are meant to be a secret, I passed them as environmental variables( yes you can store the values of terraform variables as <a href="https://awstip.com/managing-secrets-on-terraform-71ed245a455f">env variables just make sure you give it a prefix like TF_VAR_<variable-name></a>) in the local machine, of cource there are many other ways to store and reference them but I personally chose this for this project. When it comes to automating the provisioning using CICD, I pass the values as secrets so the pipeline can use that to provision the resources with variable's values which are encrypted. Also for automating the provisioning using CICD, I had to store the state files in a backend. The backend used here is Terraform cloud. You can store it in any other vaults or backend. We will discuss about how the pipelines accesses those state files to provision the resources in the next Phase.
+
+After creating the application with the necessary services, it's time to automate the entire process. To automate the provisioning of resources in AWS, we can use Terraform, an Infrastructure as Code (IaC) tool. Since I had already provisioned the resources using the AWS CLI and the AWS Management Console, I needed a way to manage those existing resources with Terraform.
+
+To do this, I created an import.tf file to generate a state file for the existing resources in the cloud provider. This was done using the import block. After importing the resources and generating the state files, I performed operations as if I were creating the resources from scratch.
+
+Next, I made the necessary changes to automate the provisioning process, such as storing the application setting variables. For managing variables, I stored some of them in the tfvars.tf file. For variables that are meant to be secrets, I passed them as environment variables. Yes, you can store the values of Terraform variables as environment variables; just make sure to prefix them with TF_VAR_<variable-name>. While there are many other ways to store and reference secrets, I personally chose this method for this project.
+
+You can check out the Terraform files in the terraform folder. For guidance through this part, refer to these resources:
+- <a href="https://developer.hashicorp.com/terraform/language/import">import.tf</a>
+- <a href="https://developer.hashicorp.com/terraform/language/import">import block</a>.
+- <a href="https://awstip.com/managing-secrets-on-terraform-71ed245a455f">env variables <variable-name></a>
 
 ## CI/CD
 Once I had the storage container and static website setup, it was really nice to be able to push updates via GitHub and have a Workflow automatically update the contents of the container. Plus this workflow purges the CDN cache so that any updates you make are immediately reflected.
