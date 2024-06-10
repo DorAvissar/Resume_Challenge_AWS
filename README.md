@@ -1,7 +1,5 @@
 # AWS Cloud Resume Challenge
 Welcome to my Cloud Resume Challenge project! ☁️
-<img src="https://media.licdn.com/dms/image/D4E12AQFqgBia89Ssyw/article-cover_image-shrink_720_1280/0/1689209856218?e=1722470400&v=beta&t=mCb9g1OVBAyjEkXfefkDIw83gTyWF61zd7ykEAyjAi0">
-
 
 Over the course of two intensive weekends, I devoted significant effort to this project. Whether you're an experienced professional or new to AWS, I hope my project inspires and assists you on your own cloud computing journey. Let's dive in together!
 
