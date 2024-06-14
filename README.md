@@ -4,16 +4,15 @@ Welcome to my Cloud Resume Challenge project! ☁️
 
 Over the course of two intensive weekends, I devoted significant effort to this project. Whether you're an experienced professional or new to AWS, I hope my project inspires and assists you on your own cloud computing journey. Let's dive in together!
 
-# This challenge is composed of 8 main parts:
+# This challenge is composed of 7 main parts:
 
 1. Write your resume in HTML and formatting it with CSS
-2. Setup CloudFront distribution and S3 Bucket
-4. Setting up DynamoDB and AWS Lambda for API
+2. Setup cloudfront distribution and S3 Bucket
+3. Connect the cloudfront to the external domain
+4. Setting up DynamoDB and AWS Lambda
 5. Setting up the Lambda and JavaScript to get viewer counter
 6. setting up CI/CD for the frontend website and to run lambda Pytest 
 7. Implementing infrastructure as code with Terraform
-8. Configure GitHub Actions for CI/CD with Azure Storage
-
 
 ## Prerequisites
 - aws account
@@ -45,11 +44,11 @@ I used this <a href="https://awsspeedtest.com/latency"> site</a>  to verify the 
 This is the result of the staic resume page.
 
 ## Phase-2: Setup CloudFront distribution and S3 Bucket
-This phase focuses on deploying the static site to the cloud. In AWS, this can be achieved by hosting the static site on an S3 bucket. 
-AWS S3 has an option to configure it for static website hosting. Once configured, you can upload your website files directly via the AWS Management Console or the CLI. 
+This phase focuses on deploying the static site to the cloud. 
+In AWS, this can be achieved by hosting the static site files on an S3 bucket. 
 The image below shows the uploaded files for the static site in the S3 bucket.
 You can access the static website through the endpoint provided by AWS for this specific site. 
-Additionally, the S3 bucket is configured to allow traffic only from the CDN, which we will discuss later. This ensures that all requests to the static site go through the CDN, enhancing security and performance.
+However, this time, the S3 bucket is configured to allow traffic only from the CDN, which we will discuss later. This ensures that all requests to the static site go through the CDN, enhancing security and performance.
 <img src="https://github.com/DorAvissar/Resume_Challenge_AWS/blob/main/website/assets/s3.png?raw=true">
 
 ## Phase-3: Domain and CDN
@@ -59,19 +58,19 @@ I could have used Amazon Route 53 for DNS management, but purchase a domain from
 So instead, I pointed the domain I purchased to the Amazon CloudFront endpoint. 
 CloudFront is a Content Delivery Network (CDN), which is a network of multiple proxy servers with the primary goal of delivering content with high availability and performance. This ensures that users across different geographical locations can access the site faster.
 
-To help you with this , here is a step-by-step guide to migrating your GoDaddy domain to AWS using S3, CloudFormation, ACM & CloudFront <a href="https://sodkiewiczm.medium.com/how-to-use-go-daddy-domain-in-aws-f295645ed548"> guide</a>.
+To help you with this , here is a step-by-step <a href="https://sodkiewiczm.medium.com/how-to-use-go-daddy-domain-in-aws-f295645ed548"> guide</a> to migrating your GoDaddy domain to AWS using S3, CloudFormation, ACM & CloudFront .
   
 
 ## Back-end
 ## Phase-4: Javascript-webapp
-The next challenge was to create a counter to keep track of how many times the page has been viewed, and this can be achieved using JavaScript. I used an event listener to trigger and call the main.js function whenever the DOM elements or content get reloaded. This function sends an HTTP request to an AWS Lambda function (we will discuss this in the next phase) to get the count and display it on the website. You can take a look at the code to understand how it has been done. It is simply a basic GET request.
+The next challenge was to create a counter to keep track of how many times the page has been viewed. This can be achieved using JavaScript. I used an event listener to trigger the index.js function whenever the DOM elements or content are reloaded. This function sends an HTTP request to an AWS Lambda function (which we will discuss in the next phase) to get the count and display it on the website. You can take a look at the code to understand how it has been done.
 
 ## Phase-5: Lambda function
 Now comes the important part. I have to create a function to update the count of visitors every time the page is reloaded. This can be achieved by using an HTTP trigger for the AWS Lambda function, meaning the function will run every time the page is reloaded. So, I created a function to fetch the count from the Amazon DynamoDB (next phase) and then update the count by increasing it by one, returning it to the front end to display the count.
-You can check out the code in the  lambda folder on my Github
+You can check out the code in the lambda folder on my Github.
 
 ## Phase-6: Amazon DynamoDB
-To store the number of visitors in AWS, I created an Amazon DynamoDB table. DynamoDB is also serverless, so I only had to pay for the resources I used. After creating the table, I set up the necessary attributes and primary key to store and retrieve the visitor count value. DynamoDB's flexible schema allowed me to adapt quickly, although it took some time to familiarize myself with its structure since it was my first time working with it. I used the AWS SDK to interact with the DynamoDB table, fetching and updating the count value as needed. 
+To store the number of visitors in AWS, I created an Amazon DynamoDB table. DynamoDB is also serverless, so I only had to pay for the resources I used. After creating the table, I set up the necessary attributes and primary key to store and retrieve the visitor count value. DynamoDB's flexible schema allowed me to adapt quickly, although it took some time to familiarize myself with its structure since it was my first time working with it.
 
 ## Phase-7 (Terraform)
 
@@ -87,8 +86,19 @@ You can check out the Terraform files in the terraform folder. For guidance thro
 - <a href="https://awstip.com/managing-secrets-on-terraform-71ed245a455f">env variables <variable-name></a>
 
 ## CI/CD
-Once I had the storage container and static website setup, it was really nice to be able to push updates via GitHub and have a Workflow automatically update the contents of the container. Plus this workflow purges the CDN cache so that any updates you make are immediately reflected.
-- I followed Microsoft's docs on [Using GitHub Actions workflow to deploy a static website in Azure Storage](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-static-site-github-actions?tabs=userlevel) which was mostly straightfoward. 
-- Every required secret for backend job ,terraform and frontend job are stored as secrets in github actions. 
-- Creating a cicd pipeline definitely improve the development process so the developers can focus on the product instead of focusing on deployment and management of it.
+Once I had everything setup , it was really nice to be able to push updates via GitHub and have a Workflow automatically run. 
+
+This GitHub Actions workflow automates the deployment and testing processes for a web application and Lambda functions. Named "Upload Website," it triggers on pushes to the main branch or manual dispatch. 
+- The workflow consists of two jobs: "deploy" and "testLambda.
+- "The "deploy" job uses jakejarvis/s3-sync-action to synchronize the contents of the website directory to an AWS S3 bucket located in the eu-central-1 region, ensuring files are kept private. It then initiates a CloudFront cache invalidation to ensure updated content is globally available. 
+- The "testLambda" job runs on an Ubuntu environment, setting up Python, caching dependencies, installing requirements from tests/requirements.txt, and executing tests using pytest for Lambda functions. 
+
+This CI/CD pipeline integrates seamlessly with AWS services and GitHub Actions, facilitating automated deployment and testing to maintain application reliability and efficiency.
+
+
+
+
+
+
+
 
