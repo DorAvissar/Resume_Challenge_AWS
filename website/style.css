@@ -251,3 +251,58 @@ body{
 .navbar-brand {
     margin-left: 110px; /* Adjust this value as needed */
 }
+
+/* Skills container styles */
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.skill-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.skill {
+    flex-basis: 20%;
+    margin: 10px; /* Added margin for spacing between skills */
+    text-align: center;
+    border: 2px solid #ddd; /* Frame around the skill icon */
+    padding: 10px;
+    border-radius: 10px; /* Rounded corners for the frame */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease; /* Ensure smooth transitions */
+    overflow: hidden; /* Ensures nothing overflows during scale transformation */
+}
+
+.skill img {
+    width: 80px; /* Adjust size as needed */
+    height: auto;
+    transition: transform 0.3s ease-in-out; /* Smooth transition for pop effect */
+}
+
+.skill:hover {
+    transform: translateY(-5px); /* Slightly raise the skill frame on hover */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Enhanced shadow for a lifted effect */
+}
+
+.skill:hover img {
+    transform: scale(1.1); /* Only scale the image */
+}
+
+.skill p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: hwb(0 0% 100%);
+}
+
+@media screen and (max-width: 768px) {
+    .skill {
+        flex-basis:50%;
+    }
+}
