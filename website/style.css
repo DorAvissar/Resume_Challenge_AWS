@@ -306,3 +306,103 @@ body{
         flex-basis:50%;
     }
 }
+
+/* Added CSS */
+:root {
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-border: #ffffff34;
+    --color-blue: #6C63FF;
+    --font-staat: 'Staatliches', cursive;
+    --font-os: 'Oswald', sans-serif;
+    --font-ram: 'Rambla', sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    font-family: 'Rambla', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 900px;
+    width: 90%;
+    margin: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 30px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.project-list {
+    list-style: none;
+    padding: 0;
+}
+
+.project-item {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.project-item:hover {
+    transform: translateY(-10px);
+    background-color: #f1f1f1;
+}
+
+.project-item h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin: 0 0 10px;
+}
+
+.project-item p {
+    font-size: 1em;
+    color: #666;
+    margin: 10px 0;
+}
+
+.github-link {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #fff;
+    background-color: var(--color-blue);
+    padding: 12px 25px;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.github-link:hover {
+    background-color: #2980b9;
+    transform: translateY(-5px);
+}
+
+.github-link:active {
+    transform: translateY(2px);
+}
+
+.fab {
+    margin-left: 10px;
+}
