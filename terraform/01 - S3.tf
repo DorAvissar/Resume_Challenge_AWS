@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "my_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "my_bucket" {
-  bucket = aws_s3_bucket.my_bucket.id
+  bucket                  = aws_s3_bucket.my_bucket.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
@@ -15,27 +15,11 @@ resource "aws_s3_bucket_public_access_block" "my_bucket" {
 }
 
 resource "aws_s3_object" "index" {
-  bucket = aws_s3_bucket.my_bucket.id
-  key    = "index.html"
-  source = "../website/index.html"
-  acl   = "private"
+  bucket       = aws_s3_bucket.my_bucket.id
+  key          = "index.html"
+  source       = "../website/index.html"
+  acl          = "private"
   content_type = "text/html"
-}
-
-resource "aws_s3_object" "style" {
-  bucket = aws_s3_bucket.my_bucket.id
-  key    = "style.css"
-  source = "../website/style.css"
-  acl   = "private"
-  content_type = "text/css"
-}
-
-resource "aws_s3_object" "index_js" {
-  bucket = aws_s3_bucket.my_bucket.id
-  key    = "index.js"
-  source = "../website/index.js"
-  acl   = "private"
-  content_type = "text/javascript"
 }
 
 locals {
@@ -46,24 +30,24 @@ resource "aws_cloudfront_origin_access_identity" "example" {
   comment = "OAI for CloudFront to access S3 bucket"
 }
 
-resource "aws_iam_user" "cloudfront_dummy_user" {
+resource "aws_iam_user" "cloudfront_user" {
   name = "cloudfront_dummy_user"
 }
 
-resource "aws_iam_access_key" "cloudfront_dummy_user_key" {
-  user = aws_iam_user.cloudfront_dummy_user.name
+resource "aws_iam_access_key" "cloudfront_user_key" {
+  user = aws_iam_user.cloudfront_user.name
 }
 
 resource "aws_iam_policy" "cloudfront_s3_access_policy" {
-  name        = "CloudFrontS3AccessPolicy"
+  name        = "CloudFrontS3AccessPolicyterraform"
   description = "IAM policy for CloudFront to access S3 bucket"
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Effect = "Allow",
-        Action = ["s3:GetObject"],
+        Effect   = "Allow",
+        Action   = ["s3:GetObject"],
         Resource = ["${aws_s3_bucket.my_bucket.arn}/*"],
       },
     ],
@@ -71,7 +55,7 @@ resource "aws_iam_policy" "cloudfront_s3_access_policy" {
 }
 
 resource "aws_iam_role" "cloudfront_s3_access_role" {
-  name = "CloudFrontS3AccessRole"
+  name = "CloudFrontS3AccessRoleterraform"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -104,7 +88,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
         Principal = {
           AWS = aws_cloudfront_origin_access_identity.example.iam_arn,
         },
-        Action = "s3:GetObject",
+        Action   = "s3:GetObject",
         Resource = ["${aws_s3_bucket.my_bucket.arn}/*"],
       },
     ],

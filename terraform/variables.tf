@@ -1,15 +1,15 @@
 variable "bucketname" {
-  default = "resume.dorav.me"
+  default = "dor-cloud-resume-challenge-aws-terraform"
 }
 
-variable "domain" {
-  default = "resumedorav.online"
-}
+# variable "domain" {
+#   default = "resumedorav.online"
+# }
 
 variable "region" {
-  default = "eu-central-1"
+  default = "us-east-2"
 }
 
 variable "bucket_name" {
-  default = "resume.dorav.me"
+  default = "dor-cloud-resume-challenge-aws-terraform "
 }

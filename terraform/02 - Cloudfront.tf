@@ -1,8 +1,8 @@
 # Create CloudFront Distribution
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
-    domain_name              = aws_s3_bucket.my_bucket.bucket_regional_domain_name
-    origin_id                = local.s3_origin_id
+    domain_name = aws_s3_bucket.my_bucket.bucket_regional_domain_name
+    origin_id   = local.s3_origin_id
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.example.cloudfront_access_identity_path
@@ -37,7 +37,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   restrictions {
     geo_restriction {
-        restriction_type = "none"
+      restriction_type = "none"
     }
   }
 
